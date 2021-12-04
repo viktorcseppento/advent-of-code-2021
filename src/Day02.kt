@@ -10,10 +10,10 @@ class SubmarineMovement(val direction: String, val value: Int) {
 }
 
 fun main() {
-    fun part1(input: List<SubmarineMovement>): Int {
+    fun part1(input: List<String>): Int {
         var pos = 0
         var depth = 0
-        input.forEach {
+        input.map(SubmarineMovement::parse).forEach {
             when (it.direction) {
                 "forward" -> pos += it.value
                 "up" -> depth -= it.value
@@ -24,11 +24,11 @@ fun main() {
         return pos * depth
     }
 
-    fun part2(input: List<SubmarineMovement>): Int {
+    fun part2(input: List<String>): Int {
         var pos = 0
         var depth = 0
         var aim = 0
-        input.forEach {
+        input.map(SubmarineMovement::parse).forEach {
             when (it.direction) {
                 "forward" -> {
                     pos += it.value
@@ -42,11 +42,11 @@ fun main() {
         return pos * depth
     }
 
-    val testInput = readInput("Day02_test").map(SubmarineMovement::parse)
+    val testInput = readInput("Day02_test")
     check(part1(testInput) == 150)
     check(part2(testInput) == 900)
 
-    val input = readInput("Day02").map(SubmarineMovement::parse)
+    val input = readInput("Day02")
     println(part1(input))
     println(part2(input))
 }
