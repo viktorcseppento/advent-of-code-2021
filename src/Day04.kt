@@ -48,7 +48,11 @@ class BingoBoard(private val nums: List<List<BingoNumber>>) {
 fun main() {
     fun part1(input: List<String>): Int {
         val calledNums = input.first().split(',').toIntList()
-        val boards = input.drop(1).filter { it.isNotBlank() }.chunked(5).map(BingoBoard::parse)
+        val boards = input
+            .drop(1)
+            .filter { it.isNotBlank() }
+            .chunked(5)
+            .map(BingoBoard::parse)
         calledNums.forEach { calledNum ->
             boards.forEach {
                 it.markBoard(calledNum)
@@ -61,19 +65,22 @@ fun main() {
 
     fun part2(input: List<String>): Int {
         val calledNums = input.first().split(',').toIntList()
-        var boards = input.drop(1).filter { it.isNotBlank() }.chunked(5).map(BingoBoard::parse)
+        val boards = input
+            .drop(1)
+            .filter { it.isNotBlank() }
+            .chunked(5)
+            .map(BingoBoard::parse)
+            .toMutableList()
         calledNums.forEach { calledNum ->
             boards.forEach {
-                if (!it.won) {
-                    it.markBoard(calledNum)
-                    if (it.checkWin()) {
-                        it.won = true
-                        if (boards.size == 1)
-                            return it.calcScore(calledNum)
-                    }
+                it.markBoard(calledNum)
+                if (it.checkWin()) {
+                    it.won = true
+                    if (boards.size == 1)
+                        return it.calcScore(calledNum)
                 }
             }
-            boards = boards.filterNot { it.won }
+            boards.removeAll { it.won }
         }
         return 0
     }
