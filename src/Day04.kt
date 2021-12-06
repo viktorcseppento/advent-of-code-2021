@@ -1,15 +1,10 @@
 data class BingoNumber(val num: Int, var checked: Boolean)
 
-class BingoBoard(private val nums: List<List<BingoNumber>>) {
-    var won: Boolean = false
-
+class BingoBoard(private val nums: Array<Array<BingoNumber>>) {
     fun checkWin(): Boolean {
-        repeat(5) {
-            nums.forEach { row ->
-                if (row.all { it.checked })
-                    return true
-            }
-        }
+        if (nums.any { row -> row.all { it.checked } })
+            return true
+
         repeat(5) { i ->
             if (nums.map { row ->
                     row[i]
@@ -26,9 +21,8 @@ class BingoBoard(private val nums: List<List<BingoNumber>>) {
 
     fun markBoard(calledNum: Int) {
         nums.forEach { row ->
-            row.forEach {
-                if (it.num == calledNum)
-                    it.checked = true
+            row.filter { it.num == calledNum }.forEach {
+                it.checked = true
             }
         }
     }
@@ -38,8 +32,8 @@ class BingoBoard(private val nums: List<List<BingoNumber>>) {
             val nums = block.map {
                 it.split(" ").filter(String::isNotBlank).map {
                     BingoNumber(it.toInt(), false)
-                }
-            }
+                }.toTypedArray()
+            }.toTypedArray()
             return BingoBoard(nums)
         }
     }
@@ -71,16 +65,18 @@ fun main() {
             .chunked(5)
             .map(BingoBoard::parse)
             .toMutableList()
+
         calledNums.forEach { calledNum ->
+            val toRemove = mutableListOf<BingoBoard>()
             boards.forEach {
                 it.markBoard(calledNum)
                 if (it.checkWin()) {
-                    it.won = true
+                    toRemove.add(it)
                     if (boards.size == 1)
                         return it.calcScore(calledNum)
                 }
             }
-            boards.removeAll { it.won }
+            boards.removeAll(toRemove)
         }
         return 0
     }
