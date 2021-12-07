@@ -36,11 +36,11 @@ fun main() {
             .flatMap { it.getPoints() }.groupBy { it }.count { it.value.size > 1 }
     }
 
-    val testInput = readInput("Day05_test")
+    val testInput = readInput("inputs/Day05_test")
     check(part1(testInput) == 5)
     check(part2(testInput) == 12)
 
-    val input = readInput("Day05")
+    val input = readInput("inputs/Day05")
     println(part1(input))
     println(part2(input))
 }

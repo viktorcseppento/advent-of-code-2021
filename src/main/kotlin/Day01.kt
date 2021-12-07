@@ -7,11 +7,11 @@ fun main() {
         return (3 until input.size).count { input[it] > input[it - 3] }
     }
 
-    val testInput = readInput("Day01_test").toIntList()
+    val testInput = readInput("inputs/Day01_test").toIntList()
     check(part1(testInput) == 7)
     check(part2(testInput) == 5)
 
-    val input = readInput("Day01").toIntList()
+    val input = readInput("inputs/Day01").toIntList()
     println(part1(input))
     println(part2(input))
 }

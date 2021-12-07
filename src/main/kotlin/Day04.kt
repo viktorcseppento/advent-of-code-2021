@@ -81,11 +81,11 @@ fun main() {
         return 0
     }
 
-    val testInput = readInput("Day04_test")
+    val testInput = readInput("inputs/Day04_test")
     check(part1(testInput) == 4512)
     check(part2(testInput) == 1924)
 
-    val input = readInput("Day04")
+    val input = readInput("inputs/Day04")
     println(part1(input))
     println(part2(input))
 }
