@@ -5,20 +5,20 @@ fun main() {
         return if (positions.isEmpty())
             0
         else
-            (positions.minOrNull()!!..positions.maxOrNull()!!).minOf { commonPos ->
-                positions.sumOf { pos -> cost(commonPos, pos) }
+            (positions.minOrNull()!!..positions.maxOrNull()!!).minOf { y ->
+                positions.sumOf { yi -> cost(y, yi) }
             }
     }
 
     fun part1(input: List<String>): Int {
-        return minFuel(input.first().split(',').toIntList()) { common, pos ->
-            (pos - common).absoluteValue
+        return minFuel(input.first().split(',').toIntList()) { y, yi ->
+            (yi - y).absoluteValue
         }
     }
 
     fun part2(input: List<String>): Int {
-        return minFuel(input.first().split(',').toIntList()) { common, pos ->
-            (pos - common).absoluteValue.let { (it + 1) * it / 2 }
+        return minFuel(input.first().split(',').toIntList()) { y, yi ->
+            (yi - y).absoluteValue.let { (it + 1) * it / 2 }
         }
     }
 

@@ -20,12 +20,12 @@ fun main() {
     }
 
     fun part1(input: List<String>): Long {
-        return input[0].split(',').toIntList()
+        return input.first().split(',').toIntList()
             .sumOf { 1 + numberOfDescendants(80 + firstSpawnTime - 1 - it) }
     }
 
     fun part2(input: List<String>): Long {
-        return input[0].split(',').toIntList()
+        return input.first().split(',').toIntList()
             .sumOf { 1 + numberOfDescendants(256 + firstSpawnTime - 1 - it) }
     }
 

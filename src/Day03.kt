@@ -1,8 +1,12 @@
 import kotlin.math.pow
 
+enum class LifeSupportComponents {
+    OXYGEN, CO2
+}
+
 fun main() {
     fun part1(input: List<String>): Int {
-        val bitWidth = input[0].length
+        val bitWidth = input.first().length
         val numberOfOnes = IntArray(bitWidth) // Number of ones in each position
         input.forEach {
             it.forEachIndexed { i, digit ->
@@ -22,31 +26,28 @@ fun main() {
 
     fun part2(input: List<String>): Int {
         fun getLifeSupportComponentRating(
-            input: List<String>,
-            bitCriteria: (Int, Int) -> Char,
+            input: List<String>, neededRating: LifeSupportComponents,
         ): Int {
             val currentList = input.toMutableList()
 
-            (0 until input[0].length).forEach { i ->
+            currentList.indices.forEach { i ->
                 val numberOfOnes = currentList.count { (it[i] == '1') }
 
-                val predicateDigit = bitCriteria(numberOfOnes, currentList.size)
+                val neededDigit = when (neededRating) {
+                    LifeSupportComponents.OXYGEN -> if (numberOfOnes >= currentList.size / 2.0) '1' else '0'
+                    LifeSupportComponents.CO2 -> if (numberOfOnes < currentList.size / 2.0) '1' else '0'
+                }
 
-                currentList.retainAll { it[i] == predicateDigit }
+                currentList.retainAll { it[i] == neededDigit }
 
                 if (currentList.size == 1)
-                    return currentList[0].toInt(2)
+                    return currentList.first().toInt(2)
             }
             return 0
         }
 
-        val oxygenGeneratorRating = getLifeSupportComponentRating(input) { numberOfOnes, listSize ->
-            if (numberOfOnes >= listSize / 2.0) '1' else '0'
-        }
-
-        val co2ScrubberRating = getLifeSupportComponentRating(input) { numberOfOnes, listSize ->
-            if (numberOfOnes < listSize / 2.0) '1' else '0'
-        }
+        val oxygenGeneratorRating = getLifeSupportComponentRating(input, LifeSupportComponents.OXYGEN)
+        val co2ScrubberRating = getLifeSupportComponentRating(input, LifeSupportComponents.CO2)
 
         return oxygenGeneratorRating * co2ScrubberRating
     }
