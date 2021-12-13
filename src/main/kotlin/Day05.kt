@@ -1,8 +1,6 @@
 import kotlin.math.abs
 import kotlin.math.max
 
-data class Point(val x: Int, val y: Int)
-
 data class HydrothermalVentLine(val x1: Int, val y1: Int, val x2: Int, val y2: Int) {
     fun getPoints(): List<Point> {
         return (0..max(abs(y2 - y1), abs(x2 - x1))).map { i ->
