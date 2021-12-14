@@ -1,8 +1,8 @@
 data class Fold(val axis: Char, val value: Int)
 
 fun main() {
-    fun getNewPoints(points: List<Point>, fold: Fold): List<Point> {
-        val newPoints = mutableListOf<Point>()
+    fun getNewPoints(points: Set<Point>, fold: Fold): Set<Point> {
+        val newPoints = mutableSetOf<Point>()
         points.forEach { point ->
             if (fold.axis == 'x') {
                 if (point.x > fold.value) {
@@ -19,12 +19,12 @@ fun main() {
             }
         }
 
-        return newPoints.distinct()
+        return newPoints
     }
 
     fun part1(input: List<String>): Int {
         val points = input.filter { it.matches(Regex("""(\d)+,(\d)+""")) }
-            .map { Point(it.substringBefore(',').toInt(), it.substringAfter(',').toInt()) }
+            .map { Point(it.substringBefore(',').toInt(), it.substringAfter(',').toInt()) }.toSet()
 
         val firstFold = input.filter { it.startsWith("fold along ") }
             .map { Fold(it.substringBefore('=').last(), it.substringAfter('=').toInt()) }.first()
@@ -34,7 +34,7 @@ fun main() {
 
     fun part2(input: List<String>): Int {
         var points = input.filter { it.matches(Regex("""(\d)+,(\d)+""")) }
-            .map { Point(it.substringBefore(',').toInt(), it.substringAfter(',').toInt()) }
+            .map { Point(it.substringBefore(',').toInt(), it.substringAfter(',').toInt()) }.toSet()
 
         val folds = input.filter { it.startsWith("fold along ") }
             .map { Fold(it.substringBefore('=').last(), it.substringAfter('=').toInt()) }
