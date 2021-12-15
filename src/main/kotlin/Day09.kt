@@ -1,21 +1,4 @@
-data class Position(val row: Int, val col: Int)
-
 fun main() {
-    fun getAdjacentPositions(position: Position, mapHeight: Int, mapWidth: Int): List<Position> {
-        val adjacentPositions = mutableListOf<Position>()
-
-        if (position.row != 0)
-            adjacentPositions.add(Position(position.row - 1, position.col))
-        if (position.row != mapHeight - 1)
-            adjacentPositions.add(Position(position.row + 1, position.col))
-        if (position.col != 0)
-            adjacentPositions.add(Position(position.row, position.col - 1))
-        if (position.col != mapWidth - 1)
-            adjacentPositions.add(Position(position.row, position.col + 1))
-
-        return adjacentPositions
-    }
-
     fun getLowPoints(heightMap: List<List<Int>>): List<Position> {
         val mapWidth = heightMap[0].size
         val mapHeight = heightMap.size
