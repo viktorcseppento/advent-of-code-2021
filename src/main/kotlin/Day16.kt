@@ -33,9 +33,9 @@ fun main() {
             return LiteralPacket(packetLength, version, typeId, value)
         } else {
             val lengthTypeId = binaryString[currentPosition++]
-
             val subPackets = mutableListOf<Packet>()
             var parsedLengths = 0
+
             if (lengthTypeId == '0') {
                 val totalSubPacketsLength = binaryString.substring(currentPosition until currentPosition + 15).toInt(2)
                 currentPosition += 15
@@ -44,7 +44,6 @@ fun main() {
                     parsedLengths += nextPacket.length
                     subPackets.add(nextPacket)
                 }
-
             } else if (lengthTypeId == '1') {
                 val subPacketsNumber = binaryString.substring(currentPosition until currentPosition + 11).toInt(2)
                 currentPosition += 11
@@ -53,7 +52,6 @@ fun main() {
                     parsedLengths += nextPacket.length
                     subPackets.add(nextPacket)
                 }
-
             } else {
                 throw IllegalStateException("Invalid length type id")
             }
@@ -93,7 +91,7 @@ fun main() {
     }
 
     fun part2(input: List<String>): Long {
-        val hexLine = input.first()
+        val hexLine = input.single()
         val binaryString = buildString { hexLine.forEach { append(it.hex2Binary()) } }
         val packet = parseNextPacket(binaryString, 0)
 
