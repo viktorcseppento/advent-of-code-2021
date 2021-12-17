@@ -23,26 +23,48 @@ fun main() {
             IntRange(y1.toInt(), y2.toInt())
         }
 
-        var numberOfVelocities = 0
+        // Possible y velocities and which steps are good
+        val yVelocityGoodStepsMap = mutableMapOf<Int, Set<Int>>()
         for (startYVelocity in targetYRange.first until abs(targetYRange.first)) {
-            for (startXVelocity in 0..targetXRange.last) {
-                var yVelocity = startYVelocity
-                var xVelocity = startXVelocity
-                var yPosition = 0
-                var xPosition = 0
-                for (step in 0 until abs(startYVelocity) * 2 + ceil(sqrt(2.0 * abs(targetYRange.first))).toInt()) {
-                    xPosition += xVelocity
-                    yPosition += yVelocity
-                    xVelocity = maxOf(0, xVelocity - 1)
-                    yVelocity--
-                    if (xPosition in targetXRange && yPosition in targetYRange) {
-                        numberOfVelocities++
-                        break
-                    }
+            var yVelocity = startYVelocity
+            var yPosition = 0
+            val goodSteps = mutableSetOf<Int>()
+            for (step in 0 until abs(startYVelocity) * 2 + ceil(sqrt(2.0 * abs(targetYRange.first))).toInt()) {
+                yPosition += yVelocity
+                yVelocity--
+                if (yPosition in targetYRange) goodSteps.add(step)
+            }
+            yVelocityGoodStepsMap[startYVelocity] = goodSteps
+        }
+
+        val maxXSteps = yVelocityGoodStepsMap.maxOf { mapEntry ->
+            mapEntry.value.maxByOrNull { setEntry -> setEntry } ?: 0
+        }
+
+        // Possible good x velocities and which steps are good
+        val xVelocityGoodStepsMap = mutableMapOf<Int, Set<Int>>()
+        for (startXVelocity in 0..targetXRange.last) {
+            var xVelocity = startXVelocity
+            var xPosition = 0
+            val goodSteps = mutableSetOf<Int>()
+            for (step in 0..maxXSteps) {
+                xPosition += xVelocity
+                xVelocity = maxOf(0, xVelocity - 1)
+                if (xPosition in targetXRange) goodSteps.add(step)
+            }
+            xVelocityGoodStepsMap[startXVelocity] = goodSteps
+        }
+        var numberOfGoodCombinedVelocities = 0
+
+        yVelocityGoodStepsMap.forEach { (_, yStepSet) ->
+            xVelocityGoodStepsMap.forEach { (_, xStepSet) ->
+                if (yStepSet.intersect(xStepSet).isNotEmpty()) {
+                    numberOfGoodCombinedVelocities++
                 }
             }
         }
-        return numberOfVelocities
+
+        return numberOfGoodCombinedVelocities
     }
 
     val testInput = readInput("inputs/Day17_test")
